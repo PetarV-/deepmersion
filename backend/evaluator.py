@@ -13,7 +13,8 @@ fname = 'backend/db/1111111111.mp3 '
 featuriser = 'lua backend/featurise.lua '
 
 # Construct the NN
-model = SoundNet(LEN_WAVEFORM // 4)
+model = SoundNet()
+model.load_weights()
 
 if torch.cuda.is_available():
     model.cuda()
