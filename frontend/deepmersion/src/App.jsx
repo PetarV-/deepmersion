@@ -6,10 +6,12 @@ import {
   Row,
   Col,
   ButtonGroup,
-  Button
+  Button,
+  Label
 } from "react-bootstrap";
 
 import Dropzone from "react-dropzone";
+import { request } from "superagent";
 
 import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import faFileImage from "@fortawesome/fontawesome-free-regular/faFileImage";
@@ -41,7 +43,8 @@ class App extends Component {
       muted: true,
 
       masterVolume: 0.5,
-      volumes: this.sounds.map(_ => 0)
+      volumes: this.sounds.map(_ => 0),
+      tags: []
     };
   }
 
@@ -64,7 +67,24 @@ class App extends Component {
     });
   };
 
+  classify = image => {
+    const req = request.post("/classify");
+    req.attach(image);
+    req.then(res => {
+      let labels = res.body.labels;
+      let volumes = res.body.volumes;
+
+      this.setState({
+        volumes: volumes,
+        labels: labels
+      });
+    });
+  };
+
   onDrop = (accepted, rejected) => {
+    this.classify(accepted[0]);
+
+    // update the preview
     let reader = new FileReader();
 
     reader.onload = img => {
@@ -75,6 +95,15 @@ class App extends Component {
   };
 
   render() {
+    let tags = this.state.tags.map(x => {
+      return (
+        <span>
+          <Label bsStyle="primary">{x}</Label>
+          &emsp;
+        </span>
+      );
+    });
+
     return (
       <div className="App">
         <div className="container">
@@ -123,8 +152,11 @@ class App extends Component {
                   </div>
                 </Dropzone>
               </Col>
-              <Col md={8}>
+              <Col md={4}>
                 <img ref="preview" className="previewImage" alt="" />
+              </Col>
+              <Col md={4}>
+                <p style={{ lineHeight: 1.75 }}>{tags}</p>
               </Col>
             </Row>
           </Grid>
