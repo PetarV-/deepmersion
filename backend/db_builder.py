@@ -1,5 +1,7 @@
 import numpy as np
 from backend.soundnet import SoundNet, LEN_WAVEFORM
+import torch
+from torch.autograd import Variable
 import os
 
 nb_sounds = 10
@@ -15,6 +17,13 @@ featuriser = 'lua backend/featurise.lua '
 
 # Construct the NN
 model = SoundNet(LEN_WAVEFORM // 4)
+
+if torch.cuda.is_available():
+    model.cuda()
+
+# Avoid code duplication
+def unpack_cuda(variable):
+    return np.squeeze((variable.data).cpu().numpy())
 
 for i in range(1, 1 << nb_sounds):
     # Generate bitstring
@@ -35,16 +44,18 @@ for i in range(1, 1 << nb_sounds):
     os.system(lua_cmd)
     # Obtain the features
     X = np.load(test_name)
+    X = X[:,:,:LEN_WAVEFORM,:].astype('float32')
+    X = Variable(torch.from_numpy(X.reshape(1, 1, LEN_WAVEFORM))).cuda()
     # Feed the underlying features to the network
     Ys = model.forward(waveform=X)
-    out_objects[i][0] = Ys['ps1'][0]
-    out_places[i][0] = Ys['ps1'][1]
-    out_objects[i][1] = Ys['ps2'][0]
-    out_places[i][1] = Ys['ps2'][1]
-    out_objects[i][2] = Ys['ps3'][0]
-    out_places[i][2] = Ys['ps3'][1]
-    out_objects[i][3] = Ys['ps4'][0]
-    out_places[i][4] = Ys['ps4'][1]
+    out_objects[i][0] = unpack_cuda(Ys['ps1'][0])
+    out_places[i][0] = unpack_cuda(Ys['ps1'][1])
+    out_objects[i][1] = unpack_cuda(Ys['ps2'][0])
+    out_places[i][1] = unpack_cuda(Ys['ps2'][1])
+    out_objects[i][2] = unpack_cuda(Ys['ps3'][0])
+    out_places[i][2] = unpack_cuda(Ys['ps3'][1])
+    out_objects[i][3] = unpack_cuda(Ys['ps4'][0])
+    out_places[i][3] = unpack_cuda(Ys['ps4'][1])
 
 np.save(db_base + 'objs_db.npy', out_objects)
 np.save(db_base + 'plcs_db.npy', out_places)
