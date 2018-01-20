@@ -8,10 +8,8 @@ LEN_WAVEFORM = 22050*20
 
 
 class SoundNet(nn.Module):
-    def __init__(self, input_shape):
+    def __init__(self):
         super(SoundNet, self).__init__()
-
-        self.input_shape = input_shape
 
         self.conv1      = nn.Conv1d(1, 16, 64, stride=2, padding=32)
         #print("Conv1", self.conv1.weight.shape, self.conv1.bias.shape)
@@ -193,7 +191,7 @@ class SoundNet(nn.Module):
 
 
 if __name__ == '__main__':
-    model = SoundNet(LEN_WAVEFORM // 4)
+    model = SoundNet()
     model.load_weights()
 
     print(model)
