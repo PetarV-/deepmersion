@@ -2,12 +2,29 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Open Sans', sans-serif;
-  background-color: #fff;
-  color: #3c3c3d
+  color: #3c3c3d;
+  background-color: #eee;
+}
+
+.shiny {
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url(./bg.jpg);
+  padding-bottom: 10px;
+  color:#eee;
+}
+
+h1 small {
+  color: #ddd;
 }
 
 h1,h2,h3 {
-  font-family: 'Josefin Slab', serif;
+  font-family: 'Lato', serif;
+}
+
+.page-header {
+  border: 0;
 }
 
 .navbar {
@@ -19,7 +36,12 @@ h1,h2,h3 {
 }
 
 .main {
-    position: relative;
-    padding: 40px 16px 24px;
-    font-size: 12px;
+  position: relative;
+  padding: 40px 16px 24px;
+  font-size: 12px;
+}
+
+.dragdrop {
+  color: #3c3c3d;
+  padding: 20px 0;
 }
