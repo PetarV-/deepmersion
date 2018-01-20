@@ -126,8 +126,8 @@ class SoundNet(nn.Module):
             p_objs = self.conv8_objs(out)
             p_scns = self.conv8_scns(out)
 
-            result['ps' + str(i+1)] = (nn.LogSoftmax(dim=1)(p_objs),
-                                       nn.LogSoftmax(dim=1)(p_scns))
+            result['ps' + str(i+1)] = (nn.Softmax(dim=1)(p_objs),
+                                       nn.Softmax(dim=1)(p_scns))
 
         return result
 
