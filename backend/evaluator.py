@@ -31,9 +31,7 @@ X = np.load(test_name)
 X = X[:,:,:LEN_WAVEFORM,:].astype('float32')
 X = Variable(torch.from_numpy(X.reshape(1, 1, LEN_WAVEFORM))).cuda()
 # Feed the underlying features to the network
-Ys = model.forward(waveform=X)
-np.save('obj0.npy', unpack_cuda(Ys['ps1'][0]))
-np.save('obj1.npy', unpack_cuda(Ys['ps2'][0]))
-np.save('obj2.npy', unpack_cuda(Ys['ps3'][0]))
-np.save('obj3.npy', unpack_cuda(Ys['ps4'][0]))
+(Y_obj, Y_plc) = model.forward(waveform=X)
+np.save('obj.npy', unpack_cuda(Y_obj))
+np.save('plc.npy', unpack_cuda(Y_plc))
 
