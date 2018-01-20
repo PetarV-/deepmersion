@@ -2,9 +2,10 @@
 
 bfiles=()
 
-arr=("0.00" "0.33" "0.67" "1.00")
+# If one would like to add volumes, they could do so here.
+# For our prototype, we will either play full-volume or silent
+arr=("1.00")
 
-# First we extract all base files :)
 for file in ./*
 do
     filename=$(basename "$file")
@@ -22,7 +23,8 @@ do
     fi
 done
 
-
-
-echo ${bfiles[@]}
+for class in ${bfiles[@]}
+do
+  echo $class >> 'classes.txt'
+done
 
