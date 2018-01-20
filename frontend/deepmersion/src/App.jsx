@@ -48,7 +48,8 @@ class App extends Component {
       placeTags: [],
 
       useObjects: true,
-      usePlaces: true
+      usePlaces: true,
+      useChatter: true
     };
   }
 
@@ -71,10 +72,17 @@ class App extends Component {
     });
   };
 
+  toggleChatter = () => {
+    this.setState(previous => {
+      return { useChatter: !previous.useChatter };
+    });
+  };
+
   classify = image => {
     request
       .post("/classify")
       .field("useObjects", this.state.useObjects)
+      .field("useChatter", this.state.useChatter)
       .field("usePlaces", this.state.usePlaces)
       .attach("image", image)
       .then(res => {
@@ -190,6 +198,14 @@ class App extends Component {
                 Places
               </Button>
             </ButtonGroup>
+            &emsp;
+            <Button
+              bsStyle="danger"
+              active={this.state.useChatter}
+              onClick={this.toggleChatter}
+            >
+              Chatter
+            </Button>
           </div>
         </div>
 
