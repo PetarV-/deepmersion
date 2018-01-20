@@ -1,4 +1,3 @@
-import numpy as np
 import os
 
 nb_sounds = 10
