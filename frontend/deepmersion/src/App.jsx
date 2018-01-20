@@ -106,36 +106,38 @@ class App extends Component {
 
     return (
       <div className="App">
-        <div className="container">
-          <PageHeader>
-            <img src={logo} className="logo" alt="logo" /> DeepMersion{" "}
-            <small>own your surroundings</small>
-          </PageHeader>
+        <div className="shiny">
+          <div className="container">
+            <PageHeader>
+              <img src={logo} className="logo" alt="logo" /> DeepMersion{" "}
+              <small>own your surroundings</small>
+            </PageHeader>
 
-          <p className="lead">
-            {/* someone please write something better than this. */}
-            DeepMersion takes photos you provide, and picks ambient background
-            music to suit it. Try with an example photo below, or upload your
-            own.
-          </p>
+            <p className="lead">
+              {/* someone please write something better than this. */}
+              DeepMersion takes photos you provide, and picks ambient background
+              music to suit it. Try with an example photo below, or upload your
+              own.
+            </p>
+          </div>
+
+          <div className="container controls">
+            <ButtonGroup>
+              <Button bsStyle="warning" onClick={this.randomizeSounds}>
+                <FontAwesomeIcon icon={faBomb} /> Randomize
+              </Button>
+              <Button
+                bsStyle="info"
+                active={this.state.muted}
+                onClick={this.toggleMute}
+              >
+                Mute
+              </Button>
+            </ButtonGroup>
+          </div>
         </div>
 
-        <div className="container controls">
-          <ButtonGroup>
-            <Button bsStyle="warning" onClick={this.randomizeSounds}>
-              <FontAwesomeIcon icon={faBomb} /> Randomize
-            </Button>
-            <Button
-              bsStyle="info"
-              active={this.state.muted}
-              onClick={this.toggleMute}
-            >
-              Mute
-            </Button>
-          </ButtonGroup>
-        </div>
-
-        <div className="container">
+        <div className="container dragdrop">
           <Grid>
             <Row>
               <Col md={4}>
