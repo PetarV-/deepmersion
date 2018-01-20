@@ -1,7 +1,13 @@
 import numpy as np
+
 # Linking functions to be accessed by the frontend
 
 default_db = 'backend/db/'
+
+def entropy(pk, qk):
+    # we can 'safely?' ignore divide by zero errors here.
+    with np.errstate(divide='ignore', invalid='ignore'):
+        return np.sum(np.sum(pk * np.log(pk/qk), axis=1), axis=1)
 
 class Bridge:
     def __init__(self, path_to_db=default_db):
@@ -15,6 +21,23 @@ class Bridge:
     # use_plc: whether to use places
     # use_chatter: whether to use chatter or normal mode
     # Returns: a vector of shape (10,) containing volume levels
-    def get_sound(obj_dist, plc_dist, chatter_level=None, chause_obj=True, use_plc=True, use_chatter=True):
-        return np.ones(10)
+    def get_sound(self, obj_dist, plc_dist, chatter_level=None, chause_obj=True, use_plc=True, use_chatter=True):
+        # compute the closest obj/plc out of 1024 possible choices.
+        # using kl distance
+        entropy_obj = entropy(self.objs, obj_dist)
+        entropy_plc = entropy(self.plcs, plc_dist)
+
+        assert entropy_obj.shape == (1024,)
+        assert entropy_plc.shape == (1024,)
+
+        minimum = np.nanargmin(entropy_obj + entropy_plc)
+        out = np.zeros(10)
+
+        for i in range(len(out)):
+            if minimum & (1 << i):
+                out[i] = 1.0
+            else:
+                out[i] = 0.0
+
+        return out 
 
