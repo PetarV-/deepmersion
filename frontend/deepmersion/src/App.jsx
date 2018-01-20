@@ -44,7 +44,11 @@ class App extends Component {
 
       masterVolume: 0.5,
       volumes: this.sounds.map(_ => 0),
-      tags: []
+      objectTags: [],
+      placeTags: [],
+
+      useObjects: true,
+      usePlaces: true
     };
   }
 
@@ -68,20 +72,30 @@ class App extends Component {
   };
 
   classify = image => {
-    const req = request.post("/classify");
-    req.attach("image", image);
-    req.then(res => {
-      let tags = res.body.tags;
-      let volumes = res.body.volumes;
-      this.setState({
-        volumes: volumes,
-        tags: tags,
-        muted: false
+    request
+      .post("/classify")
+      .field("useObjects", this.state.useObjects)
+      .field("usePlaces", this.state.usePlaces)
+      .attach("image", image)
+      .then(res => {
+        let objectTags = res.body.objectTags;
+        let placeTags = res.body.placeTags;
+
+        let volumes = res.body.volumes;
+        console.log(volumes);
+
+        this.setState({
+          volumes: volumes,
+          muted: false,
+
+          objectTags: objectTags || [],
+          placeTags: placeTags || []
+        });
       });
-    });
   };
 
   onDrop = (accepted, rejected) => {
+    // ask the server for an audio configuration
     this.classify(accepted[0]);
 
     // update the preview
@@ -94,8 +108,33 @@ class App extends Component {
     reader.readAsDataURL(accepted[0]);
   };
 
+  toggleObjects = () => {
+    this.setState(previous => {
+      return {
+        useObjects: !previous.useObjects
+      };
+    });
+  };
+
+  togglePlaces = () => {
+    this.setState(previous => {
+      return {
+        usePlaces: !previous.usePlaces
+      };
+    });
+  };
+
   render() {
-    let tags = this.state.tags.map(x => {
+    let objectTags = this.state.objectTags.map(x => {
+      return (
+        <span>
+          <Label bsStyle="primary">{x}</Label>
+          &emsp;
+        </span>
+      );
+    });
+
+    let placeTags = this.state.placeTags.map(x => {
       return (
         <span>
           <Label bsStyle="primary">{x}</Label>
@@ -134,6 +173,23 @@ class App extends Component {
                 Mute
               </Button>
             </ButtonGroup>
+            &emsp;
+            <ButtonGroup>
+              <Button
+                bsStyle="primary"
+                active={this.state.useObjects}
+                onClick={this.toggleObjects}
+              >
+                Objects
+              </Button>
+              <Button
+                bsStyle="success"
+                active={this.state.usePlaces}
+                onClick={this.togglePlaces}
+              >
+                Places
+              </Button>
+            </ButtonGroup>
           </div>
         </div>
 
@@ -158,7 +214,8 @@ class App extends Component {
                 <img ref="preview" className="previewImage" alt="" />
               </Col>
               <Col md={4}>
-                <p style={{ lineHeight: 1.75 }}>{tags}</p>
+                <p style={{ lineHeight: 1.75 }}>{objectTags}</p>
+                <p style={{ lineHeight: 1.75 }}>{placeTags}</p>
               </Col>
             </Row>
           </Grid>
