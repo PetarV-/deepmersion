@@ -3,7 +3,7 @@ import os
 nb_sounds = 10
 
 base_cmd = 'ffmpeg -y '
-options = '-acodec libmp3lame -ac 2 -ab 128k -ar 48000 '
+options = '-acodec libmp3lame -ac 1 -ab 128k -ar 22050 '
 
 fnames = []
 
