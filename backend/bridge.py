@@ -10,9 +10,11 @@ class Bridge:
 
     # obj_dist: distribution of objects (shape: (1000,))
     # plc_dist: distribution of places (shape: (401,))
+    # chatter_level: level of chatter (0 <= chatter_level <= 1.0)
     # use_obj: whether to use objects
     # use_plc: whether to use places
+    # use_chatter: whether to use chatter or normal mode
     # Returns: a vector of shape (10,) containing volume levels
-    def get_sound(obj_dist, plc_dist, use_obj=True, use_plc=True):
+    def get_sound(obj_dist, plc_dist, chatter_level=None, chause_obj=True, use_plc=True, use_chatter=True):
         return np.ones(10)
 
