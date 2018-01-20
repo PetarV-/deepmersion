@@ -81,6 +81,12 @@ class SoundNet(nn.Module):
         wf3 = waveform.narrow(2, LEN_WAVEFORM // 2    , LEN_WAVEFORM//4)
         wf4 = waveform.narrow(2, 3 * LEN_WAVEFORM // 4, LEN_WAVEFORM//4)
 
+        if torch.cuda.is_available():
+            wf1.cuda()
+            wf2.cuda()
+            wf3.cuda()
+            wf4.cuda()
+
         result = { 'ps1' : None, 'ps2' : None, 'ps3' : None, 'ps4' : None }
         wfs = [wf1, wf2, wf3, wf4]
         for i in range(4):
@@ -215,5 +221,6 @@ if __name__ == '__main__':
     model.load_weights()
 
     print(model)
-    waveform = Variable(randn(1, 1, LEN_WAVEFORM))
-    print(model.forward(waveform=waveform)['ps1'][0])
+    waveform = Variable(randn(32, 1, LEN_WAVEFORM))
+    print(model.forward(waveform))
+
