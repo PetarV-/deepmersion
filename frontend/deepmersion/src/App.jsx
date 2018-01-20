@@ -11,7 +11,7 @@ import {
 } from "react-bootstrap";
 
 import Dropzone from "react-dropzone";
-import { request } from "superagent";
+import request from "superagent";
 
 import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import faFileImage from "@fortawesome/fontawesome-free-regular/faFileImage";
@@ -58,7 +58,7 @@ class App extends Component {
       return r;
     });
 
-    this.setState({ volumes: newVolumes });
+    this.setState({ volumes: newVolumes, muted: false });
   };
 
   toggleMute = () => {
@@ -69,14 +69,14 @@ class App extends Component {
 
   classify = image => {
     const req = request.post("/classify");
-    req.attach(image);
+    req.attach("image", image);
     req.then(res => {
-      let labels = res.body.labels;
+      let tags = res.body.tags;
       let volumes = res.body.volumes;
-
       this.setState({
         volumes: volumes,
-        labels: labels
+        tags: tags,
+        muted: false
       });
     });
   };

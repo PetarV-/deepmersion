@@ -10,13 +10,19 @@ class AudioPlayer extends Component {
     let src_mp4 = this.props.src + ".mp4";
     let src_ogg = this.props.src + ".ogg";
 
+    // make sure the music starts if it is off to begin with.
+    if (this.refs.audio) {
+      this.refs.audio.volume = this.props.muted ? 0.0 : this.props.volume;
+      this.refs.audio.play();
+    }
+
     return (
       <audio
         ref="audio"
         loop
-        autoPlay={true}
-        volume={this.props.volume}
-        muted={this.props.muted}
+        // autoPlay={true}
+        preload="auto"
+        volume={this.props.muted ? 0.0 : this.props.volume}
       >
         <source src={src_mp4} type="audio/mpeg" />
         <source src={src_ogg} type="audio/ogg" />
