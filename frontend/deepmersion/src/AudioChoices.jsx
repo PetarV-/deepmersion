@@ -1,13 +1,27 @@
 // import ReactDOM from 'react-dom';
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class AudioPlayer extends Component {
-  constructor(props) {
-    super(props);
+  componentWillUpdate(props, state) {
+    this.refs.audio.volume = this.props.volume;
   }
 
   render() {
-    return (<video src={this.props.src} loop autoPlay={true} volume={this.props.volume} muted={this.props.muted}></video>)
+    let src_mp4 = this.props.src + ".mp4";
+    let src_ogg = this.props.src + ".ogg";
+
+    return (
+      <audio
+        ref="audio"
+        loop
+        autoPlay={true}
+        volume={this.props.volume}
+        muted={this.props.muted}
+      >
+        <source src={src_mp4} type="audio/mpeg" />
+        <source src={src_ogg} type="audio/ogg" />
+      </audio>
+    );
   }
 }
 
@@ -16,41 +30,22 @@ export class AudioGrid extends Component {
     super(props);
 
     // we need to keep track of one volume for each audio file
-    this.audioRoot = '/sounds';
-    this.sounds = [
-      'main-birds.mp4',
-      'main-fire.mp4',
-      'main-rain.mp4',
-      'main-thunder.mp4',
-      'main-whitenoise.mp4',
-      'main-crickets.mp4',
-      'main-people.mp4',
-      'main-sbowl.mp4',
-      'main-waves.mp4',
-      'main-wind.mp4',
-    ];
-
-    this.state = {
-      volume: this.sounds.map((_) => {
-        let r = Math.random();
-        if (r < 0.5) {
-          return 0;
-        }
-
-        return r;
-      }),
-      volumeScale: this.props.volume
-    }
+    this.audioRoot = "/sounds";
+    this.sounds = props.sounds;
   }
 
   render() {
     this.audios = this.sounds.map((name, i) => {
-      return (<AudioPlayer key={name} src={this.audioRoot + "/" + name} volume={this.state.volume[i] * this.state.volumeScale} muted={this.state.volume[i] === 0 || this.props.muted}/>)
-    })
+      return (
+        <AudioPlayer
+          key={name}
+          src={this.audioRoot + "/" + name}
+          volume={this.props.volumes[i] * this.props.masterVolume}
+          muted={this.props.volumes[i] === 0 || this.props.muted}
+        />
+      );
+    });
 
-    return (<div ref='container'>
-      {this.audios}
-    </div>)
+    return <div ref="container">{this.audios}</div>;
   }
 }
-

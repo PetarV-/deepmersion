@@ -1,39 +1,21 @@
-.App {
+.dropzone {
   text-align: center;
+  padding-top: 40px;
 }
 
-.App-title {
-  font-size: 1.5em;
+.dropzone p {
+  margin-top: 10px;
 }
 
-.App-intro {
-  font-size: large;
+.previewImage {
+  height: 200px;
+  width: 200px;
 }
 
-.SoundOnButton, .SoundOffButton {
-  background: transparent;
-  border: 2px solid #fff;
-  border-radius: 100%;
-  padding: 8px;
-  margin-right: 10px;
-  outline: none;
-  box-sizing: content-box;
-  font-size: 11px;
+.logo {
+  height: 72px;
 }
 
-.Icon {
-  width: 30px;
-  height: 30px;
+.controls {
+  margin-bottom: 20px;
 }
-
-.Icon-shape {
-  fill: #fff;
-}
-
-.VolumeSlider {
-  width: 8px;
-  height: 100px;
-
-  position: relative;
-}
-
