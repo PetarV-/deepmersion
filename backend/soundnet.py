@@ -4,7 +4,7 @@ import torch.nn as nn
 from torch import bmm, cat, randn, zeros
 from torch.autograd import Variable
 
-LEN_WAVEFORM = 961920
+LEN_WAVEFORM = 22050*20
 
 
 class SoundNet(nn.Module):
@@ -66,70 +66,46 @@ class SoundNet(nn.Module):
     def forward(self, waveform):
         """
             Args:
-                waveform (Variable): Raw 20s waveform to be partitioned into 4
-                    chunks of equal size. Every chunk is then fed into the
-                    network.
-
-            Returns:
-                dict: For each 5s chunk, a tuple of probabilities for objects
-                    and scenes which will then be used to compute KL divergence
-                    with probabilities from VGG and Places365.
+                waveform (Variable): Raw 20s waveform.
         """
-        # Partition input of 20s into 5s chunks
-        wf1 = waveform.narrow(2, 0                    , LEN_WAVEFORM//4)
-        wf2 = waveform.narrow(2, LEN_WAVEFORM // 4    , LEN_WAVEFORM//4)
-        wf3 = waveform.narrow(2, LEN_WAVEFORM // 2    , LEN_WAVEFORM//4)
-        wf4 = waveform.narrow(2, 3 * LEN_WAVEFORM // 4, LEN_WAVEFORM//4)
-
         if torch.cuda.is_available():
-            wf1.cuda()
-            wf2.cuda()
-            wf3.cuda()
-            wf4.cuda()
+            waveform.cuda()
 
-        result = { 'ps1' : None, 'ps2' : None, 'ps3' : None, 'ps4' : None }
-        wfs = [wf1, wf2, wf3, wf4]
-        for i in range(4):
-            wf = wfs[i]
+        out = self.conv1(waveform)
+        out = self.batchnorm1(out)
+        out = self.relu1(out)
+        out = self.maxpool1(out)
 
-            out = self.conv1(wf)
-            out = self.batchnorm1(out)
-            out = self.relu1(out)
-            out = self.maxpool1(out)
+        out = self.conv2(out)
+        out = self.batchnorm2(out)
+        out = self.relu2(out)
+        out = self.maxpool2(out)
 
-            out = self.conv2(out)
-            out = self.batchnorm2(out)
-            out = self.relu2(out)
-            out = self.maxpool2(out)
+        out = self.conv3(out)
+        out = self.batchnorm3(out)
+        out = self.relu3(out)
 
-            out = self.conv3(out)
-            out = self.batchnorm3(out)
-            out = self.relu3(out)
+        out = self.conv4(out)
+        out = self.batchnorm4(out)
+        out = self.relu4(out)
 
-            out = self.conv4(out)
-            out = self.batchnorm4(out)
-            out = self.relu4(out)
+        out = self.conv5(out)
+        out = self.batchnorm5(out)
+        out = self.relu5(out)
+        out = self.maxpool5(out)
 
-            out = self.conv5(out)
-            out = self.batchnorm5(out)
-            out = self.relu5(out)
-            out = self.maxpool5(out)
+        out = self.conv6(out)
+        out = self.batchnorm6(out)
+        out = self.relu6(out)
 
-            out = self.conv6(out)
-            out = self.batchnorm6(out)
-            out = self.relu6(out)
+        out = self.conv7(out)
+        out = self.batchnorm7(out)
+        out = self.relu7(out)
 
-            out = self.conv7(out)
-            out = self.batchnorm7(out)
-            out = self.relu7(out)
+        p_objs = self.conv8_objs(out)
+        p_scns = self.conv8_scns(out)
 
-            p_objs = self.conv8_objs(out)
-            p_scns = self.conv8_scns(out)
-
-            result['ps' + str(i+1)] = (nn.Softmax(dim=1)(p_objs),
-                                       nn.Softmax(dim=1)(p_scns))
-
-        return result
+        return (nn.Softmax(dim=1)(p_objs), nn.Softmax(dim=1)(p_scns))
 
     def load_weights(self):
         bn1_bs = np.fromfile('bn1_bs.npy', dtype=np.float32)
@@ -221,6 +197,7 @@ if __name__ == '__main__':
     model.load_weights()
 
     print(model)
-    waveform = Variable(randn(32, 1, LEN_WAVEFORM))
-    print(model.forward(waveform))
+    waveform = Variable(randn(1, 1, LEN_WAVEFORM))
+    out = model.forward(waveform)
+    print(out)
 
