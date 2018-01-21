@@ -5,12 +5,15 @@ from scipy.stats import entropy
 
 default_db = 'backend/db/'
 
-def kl(pks, qk, msks):
+def kl(pks, qk, msks=None):
     # we can 'safely?' ignore divide by zero errors here.
     with np.errstate(divide='ignore', invalid='ignore'):
         min_kl = None
         for i in range(pks.shape[0]):
-            curr_kl = entropy(pks[i][msks], qk)
+            if msks is not None:
+                curr_kl = entropy(pks[i][msks], qk)
+            else:
+                curr_kl = entropy(pks[i], qk)
             if min_kl is None or curr_kl < min_kl:
                 min_kl = curr_kl
         return min_kl
@@ -35,7 +38,7 @@ class Bridge:
         if use_chatter:
             entropies = np.zeros(self.nb_sounds)
             for i in range(self.nb_sounds):
-                entropy_obj = kl(self.objs[1 << i], obj_dist, self.msks)
+                entropy_obj = kl(self.objs[1 << i], obj_dist, None)
                 entropy_plc = kl(self.plcs[1 << i], plc_dist, self.msks)
 
                 if use_obj:
@@ -59,7 +62,7 @@ class Bridge:
             best = None
 
             for i in range(1, 1 << self.nb_sounds):
-                entropy_obj = kl(self.objs[i], obj_dist, self.msks)
+                entropy_obj = kl(self.objs[i], obj_dist, None)
                 entropy_plc = kl(self.plcs[i], plc_dist, self.msks)
 
                 total_entropy = 0.0
