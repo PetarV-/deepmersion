@@ -34,7 +34,7 @@ When an image is submitted to the system, its content is analysed by two state-o
 * Places-365-CNN ([Zhou et al., 2017](http://ieeexplore.ieee.org/document/7968387/)) for extracting the scene characteristics of an image (pre-trained on the Places2 dataset - 365 scene classes).
 
 These are capable of extracting robust high-level image features. In order to match the image with appropriate sounds, a database of ambiental sounds is constructed---in our case, we have constructed
-a dataset of various superimpositions of the basic sounds from [A Soft Murmur](https://asoftmurmur.com"). These sounds are then fed through a SoundNet neural network architecture
+a dataset of various superimpositions of the basic sounds from [A Soft Murmur](https://asoftmurmur.com). These sounds are then fed through a SoundNet neural network architecture
 ([Aytar et al., 2016](https://arxiv.org/abs/1610.09001)), which is trained to predict content (objects and scenes) in videos _while only having access to the sound information_. It has been pre-trained
 on hundreds of gigabytes of MP3 files, and therefore also offers a robust representation of auditory features. The most appropriate sound is then chosen based on the Kullback-Leibler (KL) divergence between
 the predictions of the image networks and the predictions of the SoundNet.
