@@ -46,6 +46,8 @@ export class Controls extends Component {
         >
           Chatter
         </Button>
+        &emsp;
+        {this.props.loading && <Spinner name="circle" />}
       </div>
     );
   }

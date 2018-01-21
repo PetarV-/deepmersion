@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import { PageHeader } from "react-bootstrap";
+import Spinner from "react-spinkit";
 
 import { AudioGrid } from "./AudioChoices";
 import { Controls } from "./Controls";
@@ -54,10 +55,17 @@ export default class App extends Component {
   };
 
   updateVolumes = volumes => {
+    this.refs.controls.props.loading = false;
+    console.log("Updating");
+    console.log(volumes);
     this.setState({
       volumes: volumes,
       muted: false
     });
+  };
+
+  showLoading = () => {
+    this.refs.controls.props.loading = true;
   };
 
   render() {
@@ -79,6 +87,7 @@ export default class App extends Component {
           </div>
 
           <Controls
+            ref="controls"
             onRandomise={this.randomizeSounds}
             onToggle={this.toggle}
             useObjects={this.state.useObjects}
@@ -94,6 +103,7 @@ export default class App extends Component {
           usePlaces={this.state.usePlaces}
           chatterLevel={this.state.chatterLevel}
           onClassify={this.updateVolumes}
+          onBeforeClassify={this.showLoading}
         />
 
         <AudioGrid

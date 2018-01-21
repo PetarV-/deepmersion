@@ -70,6 +70,7 @@ export class DropZone extends Component {
 
   onDrop = (accepted, rejected) => {
     // ask the server for an audio configuration
+    this.props.onBeforeClassify();
     this.classify(accepted[0]);
 
     // update the preview
