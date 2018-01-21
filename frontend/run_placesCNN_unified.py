@@ -2,7 +2,7 @@
 # by Bolei Zhou, sep 2, 2017
 # last modified date: Dec. 27, 2017, migrating everything to python36 and latest pytorch and torchvision
 import os
-
+import io
 import torch
 import torchvision.models as models
 
@@ -16,12 +16,12 @@ from scipy.misc import imresize as imresize
 import cv2
 from PIL import Image
 
-here = os.path.dirname(__file__)
+model_dir = os.getenv('FRONTEND_HOME', '.')
 
 def load_labels():
     # prepare all the labels
     # scene category relevant
-    file_name_category = os.path.join(here, 'categories_places365.txt')
+    file_name_category = os.path.join(model_dir, 'categories_places365.txt')
     if not os.access(file_name_category, os.W_OK):
         synset_url = 'https://raw.githubusercontent.com/csailvision/places365/master/categories_places365.txt'
         os.system('wget ' + synset_url)
@@ -32,7 +32,7 @@ def load_labels():
     classes = tuple(classes)
 
     # indoor and outdoor relevant
-    file_name_IO = os.path.join(here, 'IO_places365.txt')
+    file_name_IO = os.path.join(model_dir, 'IO_places365.txt')
     if not os.access(file_name_IO, os.W_OK):
         synset_url = 'https://raw.githubusercontent.com/csailvision/places365/master/IO_places365.txt'
         os.system('wget ' + synset_url)
@@ -45,14 +45,14 @@ def load_labels():
     labels_IO = np.array(labels_IO)
 
     # scene attribute relevant
-    file_name_attribute = os.path.join(here, 'labels_sunattribute.txt')
+    file_name_attribute = os.path.join(model_dir, 'labels_sunattribute.txt')
     if not os.access(file_name_attribute, os.W_OK):
         synset_url = 'https://raw.githubusercontent.com/csailvision/places365/master/labels_sunattribute.txt'
         os.system('wget ' + synset_url)
     with open(file_name_attribute) as f:
         lines = f.readlines()
         labels_attribute = [item.rstrip() for item in lines]
-    file_name_W = os.path.join(here, 'W_sceneattribute_wideresnet18.npy')
+    file_name_W = os.path.join(model_dir, 'W_sceneattribute_wideresnet18.npy')
     if not os.access(file_name_W, os.W_OK):
         synset_url = 'http://places2.csail.mit.edu/models_places365/W_sceneattribute_wideresnet18.npy'
         os.system('wget ' + synset_url)
@@ -90,7 +90,7 @@ def returnTF():
 def load_model():
     # this model has a last conv feature map as 14x14
 
-    model_file = os.path.join(here,'whole_wideresnet18_places365_python36.pth.tar')
+    model_file = os.path.join(model_dir,'whole_wideresnet18_places365_python36.pth.tar')
     if not os.access(model_file, os.W_OK):
         os.system('wget http://places2.csail.mit.edu/models_places365/' + model_file)
         os.system('wget https://raw.githubusercontent.com/csailvision/places365/master/wideresnet.py')
@@ -133,7 +133,7 @@ def classify_places(image):
     weight_softmax = params[-2].data.numpy()
     weight_softmax[weight_softmax<0] = 0
 
-    img = Image.open(image)
+    img = Image.open(io.BytesIO(image))
 
     input_img = V(tf(img).unsqueeze(0), volatile=True)
 

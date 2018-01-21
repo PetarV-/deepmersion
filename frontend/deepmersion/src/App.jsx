@@ -66,7 +66,7 @@ export default class App extends Component {
         <div className="shiny">
           <div className="container">
             <PageHeader>
-              <img src={logo} className="logo" alt="logo" /> Deepmersion{" "}
+              <img src={logo} className="logo" alt="logo" /> deepmersion{" "}
               <small>own your surroundings</small>
             </PageHeader>
 
@@ -102,6 +102,21 @@ export default class App extends Component {
           volumes={this.state.volumes}
           sounds={this.sounds}
         />
+
+        <footer>
+          <div className="container">
+            <hr />
+
+            {/* <small>
+              Developed by{" "}
+              <a href="https://github.com/andreeadeac22">Andreea Deac</a>,{" "}
+              <a href="https://github.com/catalina17">Catalina Cangeea</a>,{" "}
+              <a href="https://github.com/matthewelse">Matthew Else</a> and{" "}
+              <a href="https://github.com/petarv-">Petar Velickovic</a> at{" "}
+              <a href="http://hackcambridge.com/">Hack Cambridge</a>, 2018.
+            </small> */}
+          </div>
+        </footer>
       </div>
     );
   }
