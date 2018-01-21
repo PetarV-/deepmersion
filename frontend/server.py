@@ -58,7 +58,7 @@ def classify():
     obj_dist, plc_dist, places_tag1, places_tag2, places_tag3 = do_classification(image)
     volumes = bridge.get_sound(obj_dist, plc_dist, float(request.form['chatterLevel']), request.form['useObjects'], request.form['usePlaces'], request.form['useChatter'])
 
-    return jsonify({ 'volumes': list(volumes), 'objectTags': ['a', 'b', 'c'], 'placeTags': [places_tag1, places_tag2, places_tag3]})
+    return jsonify({ 'volumes': list(volumes), 'objectTags': [], 'placeTags': [places_tag1, places_tag2, places_tag3]})
 
 @app.route('/cuda')
 def cudaAvailable():
