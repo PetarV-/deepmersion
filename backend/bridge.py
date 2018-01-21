@@ -1,18 +1,25 @@
 import numpy as np
+from scipy import stats.entropy
 
 # Linking functions to be accessed by the frontend
 
 default_db = 'backend/db/'
 
-def entropy(pk, qk):
+def kl(pks, qk):
     # we can 'safely?' ignore divide by zero errors here.
     with np.errstate(divide='ignore', invalid='ignore'):
-        return -np.sum(np.sum(pk * np.log(pk/qk) - pk + qk, axis=1), axis=1)
+        min_kl = None
+        for i in pks.shape[0]:
+            curr_kl = stats.entropy(pks[i], qk)
+            if min_kl is None or curr_kl < min_kl:
+                min_kl = curr_kl
+        return min_kl
 
 class Bridge:
-    def __init__(self, path_to_db=default_db):
+    def __init__(self, nb_sounds=10, path_to_db=default_db):
         self.objs = np.load(path_to_db + 'objs_db.npy')
         self.plcs = np.load(path_to_db + 'plcs_db.npy')
+        self.nb_sounds = nb_sounds
 
     # obj_dist: distribution of objects (shape: (1000,))
     # plc_dist: distribution of places (shape: (401,))
@@ -22,13 +29,13 @@ class Bridge:
     # use_chatter: whether to use chatter or normal mode
     # Returns: a vector of shape (10,) containing volume levels
     def get_sound(self, obj_dist, plc_dist, chatter_level=0.0, use_obj=True, use_plc=True, use_chatter=False):
-        out = np.zeros(10)
+        out = np.zeros(self.nb_sounds)
 
         if use_chatter:
-            entropies = np.zeros(10)
-            for i in range(10):
-                entropy_obj = entropy(self.objs[1 << i], obj_dist)
-                entropy_plc = entropy(self.plcs[1 << i], plc_dist)
+            entropies = np.zeros(self.nb_sounds)
+            for i in range(self.nb_sounds):
+                entropy_obj = kl(self.objs[1 << i], obj_dist)
+                entropy_plc = kl(self.plcs[1 << i], plc_dist)
 
                 if use_obj:
                     entropies[i] += entropy_obj
@@ -40,30 +47,33 @@ class Bridge:
             # -4.6 = ln 0.01
             l = -4.6 * (chatter_level - 1.0)
 
-            for i in range(10):
+            for i in range(self.nb_sounds):
                 out[indices[i]] = exp(-l * i)
 
         else:
             # compute the closest obj/plc out of 1024 possible choices.
             # using kl distance
 
-            entropy_obj = entropy(self.objs, obj_dist)
-            entropy_plc = entropy(self.plcs, plc_dist)
+            min_kl = None
+            best = None
 
-            assert entropy_obj.shape == (1024,)
-            assert entropy_plc.shape == (1024,)
+            for i in range(1, 1 << self.nb_sounds):
+                entropy_obj = kl(self.objs[i], obj_dist)
+                entropy_plc = kl(self.plcs[i], plc_dist)
 
-            total_entropy = np.zeros_like(entropy_obj)
+                total_entropy = 0.0
 
-            if use_obj:
-                total_entropy += entropy_obj
-            if use_plc:
-                total_entropy += entropy_plc
+                if use_obj:
+                    total_entropy += entropy_obj
+                if use_plc:
+                    total_entropy += entropy_plc
 
-            minimum = np.nanargmin(total_entropy)
+                if best is None or total_entropy < min_kl:
+                    min_kl = total_entropy
+                    best = i
 
-            for i in range(len(out)):
-                if minimum & (1 << i):
+            for i in range(self.nb_sounds):
+                if best & (1 << i):
                     out[i] = 1.0
                 else:
                     out[i] = 0.0
