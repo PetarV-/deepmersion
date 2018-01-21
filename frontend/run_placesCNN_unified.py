@@ -90,8 +90,10 @@ def returnTF():
     ])
     return tf
 
+model_cache = None
 
 def load_model():
+    global model_cache
     # this model has a last conv feature map as 14x14
 
     model_file = os.path.join(model_dir,'whole_wideresnet18_places365_python36.pth.tar')
@@ -100,8 +102,13 @@ def load_model():
         os.system('wget https://raw.githubusercontent.com/csailvision/places365/master/wideresnet.py')
     useGPU = torch.cuda.is_available()
     if useGPU:
-        model = torch.load(model_file)
-        model.cuda()
+        print('using CUDA')
+        if model_cache is None:
+            model = torch.load(model_file)
+            model_cache = model
+        else:
+            model = model_cache
+        model = model.cuda()
     else:
         model = torch.load(model_file, map_location=lambda storage, loc: storage) # allow cpu
 
@@ -148,6 +155,7 @@ def classify_places(image):
 
     # forward pass
     if torch.cuda.is_available():
+        print('using CUDA (2)')
         input_img = input_img.cuda()
     logit = model.forward(input_img)
     h_x = F.softmax(logit, 1).data.squeeze()

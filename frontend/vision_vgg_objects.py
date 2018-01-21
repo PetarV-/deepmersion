@@ -7,10 +7,19 @@ from torchvision import transforms as trn
 from torch.nn import functional as F
 from PIL import Image
 
+vgg_model_cache = None
+
 def classify_objects(img_name):
-    model = vgg16(pretrained=True)
+    global vgg_model_cache
+
+    if vgg_model_cache is None:
+        model = vgg16(pretrained=True)
+        vgg_model_cache = model
+    else:
+        model = vgg_model_cache
+
     if torch.cuda.is_available():
-        model.cuda()
+        model = model.cuda()
     model.eval()
 
     # load the image transformer
