@@ -1,5 +1,5 @@
 # deepmersion
-![deepmersion](https://raw.githubusercontent.com/PetarV-/deepmersion/master/logo-scaled.png?token=AD_VHMMLyhlkxYhD6SdQPOo38S976D_2ks5abWcXwA%3D%3D)
+<img src="https://raw.githubusercontent.com/PetarV-/deepmersion/master/logo-scaled.png?token=AD_VHMMLyhlkxYhD6SdQPOo38S976D_2ks5abWcXwA%3D%3D" width="250">
 
 own your surroundings
 
@@ -26,6 +26,8 @@ the first option can be quickly discarded. Therefore, _we would ideally want the
 Deepmersion was built with this as its primary objective---especially, making it way simpler to do so compared to the extensive manual fine-tuning offered by
 existing solutions. The user is able to provide an image to our system (for our preferred use case, this image will be a shot of the user's immediate
 surroundings), and the system will respond with an appropriate ambient sound that captures the content of the image.
+
+We find this approach to be _optimal_ - there are no adjustment requirements from the user, with the sound generated still often being appropriate.
 
 ## Internals overview
 When an image is submitted to the system, its content is analysed by two state-of-the-art neural networks for object and scene recognition:
