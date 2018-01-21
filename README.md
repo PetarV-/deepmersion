@@ -1,5 +1,5 @@
 # deepmersion
-![deepmersion][https://github.com/PetarV-/deepmersion/blob/master/frontend/deepmersion/src/logo.svg]
+![deepmersion][https://raw.githubusercontent.com/PetarV-/deepmersion/master/frontend/deepmersion/src/logo.svg?token=AD_VHLCxnBNot5T5gdEoJYtcdhdFa-0Xks5abWVIwA%3D%3D]
 
 own your surroundings
 
