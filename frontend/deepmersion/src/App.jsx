@@ -9,6 +9,7 @@ import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import faFileImage from "@fortawesome/fontawesome-free-regular/faFileImage";
 
 import { AudioGrid } from "./AudioChoices";
+import { TagList } from "./TagList";
 import { Controls } from "./Controls";
 import "./App.css";
 import logo from "./logo.svg";
@@ -105,24 +106,6 @@ class App extends Component {
   };
 
   render() {
-    let objectTags = this.state.objectTags.map(x => {
-      return (
-        <span>
-          <Label bsStyle="primary">{x}</Label>
-          &emsp;
-        </span>
-      );
-    });
-
-    let placeTags = this.state.placeTags.map(x => {
-      return (
-        <span>
-          <Label bsStyle="primary">{x}</Label>
-          &emsp;
-        </span>
-      );
-    });
-
     return (
       <div className="App">
         <div className="shiny">
@@ -171,8 +154,8 @@ class App extends Component {
                 <img ref="preview" className="previewImage" alt="" />
               </Col>
               <Col md={4}>
-                <p style={{ lineHeight: 1.75 }}>{objectTags}</p>
-                <p style={{ lineHeight: 1.75 }}>{placeTags}</p>
+                <TagList tags={this.state.objectTags} bsStyle="primary" />
+                <TagList tags={this.state.placeTags} bsStyle="success" />
               </Col>
             </Row>
           </Grid>
