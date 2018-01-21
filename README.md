@@ -13,8 +13,8 @@ These options thus either give the user too little or too much choice---the form
 latter might cause significant time to be spent tuning the sound, thus inadvertently causing an additional distraction (as at least one of the creators
 of this repository has experienced personally!).
 
-As a potential "golden middle" approach, we present [deepmersion.com](http://deepmersion.com)---a prototype of the 'one ambient sound generator to rule them all',
-leveraging _three state-of-the-art neural network architectures_ to provide the user with the *optimal level of choice*.
+Here we present [deepmersion.com](http://deepmersion.com)---a prototype of the 'one ambient sound generator to rule them all',
+leveraging _three state-of-the-art neural network architectures_ to provide the user with the **optimal level of choice**.
 
 ## Design principle
 
