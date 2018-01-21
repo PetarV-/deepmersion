@@ -21,22 +21,22 @@ here = os.path.dirname(__file__)
 def load_labels():
     # prepare all the labels
     # scene category relevant
-    file_name_category = 'categories_places365.txt'
+    file_name_category = os.path.join(here, 'categories_places365.txt')
     if not os.access(file_name_category, os.W_OK):
         synset_url = 'https://raw.githubusercontent.com/csailvision/places365/master/categories_places365.txt'
         os.system('wget ' + synset_url)
     classes = list()
-    with open(os.path.join(here, file_name_category)) as class_file:
+    with open(file_name_category) as class_file:
         for line in class_file:
             classes.append(line.strip().split(' ')[0][3:])
     classes = tuple(classes)
 
     # indoor and outdoor relevant
-    file_name_IO = 'IO_places365.txt'
+    file_name_IO = os.path.join(here, 'IO_places365.txt')
     if not os.access(file_name_IO, os.W_OK):
         synset_url = 'https://raw.githubusercontent.com/csailvision/places365/master/IO_places365.txt'
         os.system('wget ' + synset_url)
-    with open(os.path.join(here, file_name_IO)) as f:
+    with open(file_name_IO) as f:
         lines = f.readlines()
         labels_IO = []
         for line in lines:
@@ -90,7 +90,7 @@ def returnTF():
 def load_model():
     # this model has a last conv feature map as 14x14
 
-    model_file = 'whole_wideresnet18_places365_python36.pth.tar'
+    model_file = os.path.join(here,'whole_wideresnet18_places365_python36.pth.tar')
     if not os.access(model_file, os.W_OK):
         os.system('wget http://places2.csail.mit.edu/models_places365/' + model_file)
         os.system('wget https://raw.githubusercontent.com/csailvision/places365/master/wideresnet.py')
