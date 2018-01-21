@@ -2,6 +2,7 @@
 Front-end server for deepmersion.
 """
 import sys
+import requests
 import numpy as np
 
 from PIL import Image
@@ -34,15 +35,16 @@ def do_classification(image):
 @app.route('/classify', methods=['POST'])
 def classify():
     if not 'image' in request.files:
-        # this should be a fatal error
-        print('file not included')
-    
-    image = request.files['image']
+        if 'image_url' in request.form:
+            image = requests.get(request.form['image_url'], stream=True).raw
+    else:
+        image = request.files['image']
+
     img = Image.open(image)
     
     # do the stuff here
     obj_dist, plc_dist = do_classification(img)
-    volumes = bridge.get_sound(obj_dist, plc_dist, request.form['chatterLevel'], request.form['useObjects'], request.form['usePlaces'], request.form['useChatter'])
+    volumes = bridge.get_sound(obj_dist, plc_dist, float(request.form['chatterLevel']), request.form['useObjects'], request.form['usePlaces'], request.form['useChatter'])
 
     return jsonify({ 'volumes': list(volumes), 'objectTags': ['a', 'b', 'c'], 'placeTags': ['d', 'e', 'f']})
 
