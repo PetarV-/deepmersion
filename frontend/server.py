@@ -36,10 +36,15 @@ def send_home():
     return send_file('deepmersion/build/index.html')
 
 def do_classification(image):
-    places_prob, weight_softmax, idx = classify_places(image)
+    places_prob, weight_softmax, idx, classes = classify_places(image)
+
+    places_tag1 = classes[idx[0]]
+    places_tag2 = classes[idx[1]]
+    places_tag3 = classes[idx[2]]
+
     objects_prob = classify_objects(image)
     
-    return objects_prob, places_prob
+    return objects_prob, places_prob, places_tag1, places_tag2, places_tag3
 
 @app.route('/classify', methods=['POST'])
 def classify():
@@ -50,10 +55,10 @@ def classify():
         image = request.files['image'].read()
     
     # do the stuff here
-    obj_dist, plc_dist = do_classification(image)
+    obj_dist, plc_dist, places_tag1, places_tag2, places_tag3 = do_classification(image)
     volumes = bridge.get_sound(obj_dist, plc_dist, float(request.form['chatterLevel']), request.form['useObjects'], request.form['usePlaces'], request.form['useChatter'])
 
-    return jsonify({ 'volumes': list(volumes), 'objectTags': ['a', 'b', 'c'], 'placeTags': ['d', 'e', 'f']})
+    return jsonify({ 'volumes': list(volumes), 'objectTags': ['a', 'b', 'c'], 'placeTags': [places_tag1, places_tag2, places_tag3]})
 
 @app.route('/cuda')
 def cudaAvailable():

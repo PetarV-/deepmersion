@@ -174,7 +174,7 @@ def classify_places(image):
     print(', '.join([labels_attribute[idx_a[i]] for i in range(-1,-10,-1)]))
 
     print("h_x", len(h_x))
-    return h_x, weight_softmax, idx
+    return h_x, weight_softmax, idx, classes
 
 """""
 def do_activation(image, weight_softmax, idx):
