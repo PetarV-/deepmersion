@@ -2,7 +2,7 @@
 # by Bolei Zhou, sep 2, 2017
 # last modified date: Dec. 27, 2017, migrating everything to python36 and latest pytorch and torchvision
 import os
-
+import io
 import torch
 import torchvision.models as models
 
