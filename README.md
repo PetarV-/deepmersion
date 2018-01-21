@@ -1,5 +1,5 @@
 # deepmersion
-![deepmersion](https://raw.githubusercontent.com/PetarV-/deepmersion/master/frontend/deepmersion/src/logo.svg?token=AD_VHMJ9tKOa0tMr0viaAzg7ZmtnIAXRks5abWbfwA%3D%3D)
+![deepmersion](https://raw.githubusercontent.com/PetarV-/deepmersion/master/logo-scaled.png?token=AD_VHMMLyhlkxYhD6SdQPOo38S976D_2ks5abWcXwA%3D%3D)
 
 own your surroundings
 
@@ -24,7 +24,24 @@ for the sound to **reflect a distilled version of one's surroundings**, keeping 
 feeling less artificial. As our primary use case involves productivity-boosting (although other applications of deepmersion are, of course, more than possible),
 the first option can be quickly discarded. Therefore, _we would ideally want the generated ambient sound to match the context of the user's surroundings_.
 Deepmersion was built with this as its primary objective---especially, making it way simpler to do so compared to the extensive manual fine-tuning offered by
-existing solutions.
+existing solutions. The user is able to provide an image to our system (for our preferred use case, this image will be a shot of the user's immediate
+surroundings), and the system will respond with an appropriate ambient sound that captures the content of the image.
+
+## Internals overview
+When an image is submitted to the system, its content is analysed by two state-of-the-art neural networks for object and scene recognition:
+
+* VGG-16 ([Simonyan and Zisserman, 2014](https://arxiv.org/abs/1409.1556)) for extracting the most prominent objects on an image (pre-trained on the ImageNet dataset - 1000 object classes);
+* Places-365-CNN ([Zhou et al., 2017](http://ieeexplore.ieee.org/document/7968387/)) for extracting the scene characteristics of an image (pre-trained on the Places2 dataset - 365 scene classes).
+
+These are capable of extracting robust high-level image features. In order to match the image with appropriate sounds, a database of ambiental sounds is constructed---in our case, we have constructed
+a dataset of various superimpositions of the basic sounds from [A Soft Murmur](https://asoftmurmur.com"). These sounds are then fed through a SoundNet neural network architecture
+([Aytar et al., 2016](https://arxiv.org/abs/1610.09001)), which is trained to predict content (objects and scenes) in videos _while only having access to the sound information_. It has been pre-trained
+on hundreds of gigabytes of MP3 files, and therefore also offers a robust representation of auditory features. The most appropriate sound is then chosen based on the Kullback-Leibler (KL) divergence between
+the predictions of the image networks and the predictions of the SoundNet.
+
+All models have been expressed in the PyTorch framework, enabling seamless integration with Python workflows.
+
+## Additional features
 
 ## License
 MIT
