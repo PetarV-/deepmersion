@@ -90,7 +90,7 @@ def returnTF():
     ])
     return tf
 
-model_cache = load_model()
+model_cache = None
 
 def load_model():
     global model_cache
@@ -127,6 +127,8 @@ def load_model():
     for name in features_names:
         model._modules.get(name).register_forward_hook(hook_feature)
     return model
+
+load_model()
 
 features_blobs = []
 
