@@ -45,14 +45,14 @@ def load_labels():
     labels_IO = np.array(labels_IO)
 
     # scene attribute relevant
-    file_name_attribute = 'labels_sunattribute.txt'
+    file_name_attribute = os.path.join(here, 'labels_sunattribute.txt')
     if not os.access(file_name_attribute, os.W_OK):
         synset_url = 'https://raw.githubusercontent.com/csailvision/places365/master/labels_sunattribute.txt'
         os.system('wget ' + synset_url)
-    with open(os.path.join(here, file_name_attribute)) as f:
+    with open(file_name_attribute) as f:
         lines = f.readlines()
         labels_attribute = [item.rstrip() for item in lines]
-    file_name_W = 'W_sceneattribute_wideresnet18.npy'
+    file_name_W = os.path.join(here, 'W_sceneattribute_wideresnet18.npy')
     if not os.access(file_name_W, os.W_OK):
         synset_url = 'http://places2.csail.mit.edu/models_places365/W_sceneattribute_wideresnet18.npy'
         os.system('wget ' + synset_url)
