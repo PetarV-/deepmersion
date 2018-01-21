@@ -12,8 +12,12 @@ from torch.nn import functional as F
 
 import numpy as np
 from scipy.misc import imresize as imresize
+"""""
+# import cv2
+=======
 
 import cv2
+"""
 from PIL import Image
 
 model_dir = os.getenv('FRONTEND_HOME', '.')
@@ -94,9 +98,10 @@ def load_model():
     if not os.access(model_file, os.W_OK):
         os.system('wget http://places2.csail.mit.edu/models_places365/' + model_file)
         os.system('wget https://raw.githubusercontent.com/csailvision/places365/master/wideresnet.py')
-    useGPU = 0
-    if useGPU == 1:
+    useGPU = torch.cuda.is_available()
+    if useGPU:
         model = torch.load(model_file)
+        model.cuda()
     else:
         model = torch.load(model_file, map_location=lambda storage, loc: storage) # allow cpu
 
@@ -130,7 +135,11 @@ def classify_places(image):
 
     # get the softmax weight
     params = list(model.parameters())
-    weight_softmax = params[-2].data.numpy()
+
+    weight_softmax = params[-2].data
+    if torch.cuda.is_available():
+        weight_softmax = weight_softmax.cpu()
+    weight_softmax = weight_softmax.numpy()
     weight_softmax[weight_softmax<0] = 0
 
     img = Image.open(io.BytesIO(image))
@@ -138,11 +147,15 @@ def classify_places(image):
     input_img = V(tf(img).unsqueeze(0), volatile=True)
 
     # forward pass
+    if torch.cuda.is_available():
+        input_img = input_img.cuda()
     logit = model.forward(input_img)
     h_x = F.softmax(logit, 1).data.squeeze()
     probs, idx = h_x.sort(0, True)
 
     # output the IO prediction
+    if torch.cuda.is_available():
+        idx = idx.cpu()
     io_image = np.mean(labels_IO[idx[:10].numpy()]) # vote for the indoor or outdoor
     if io_image < 0.5:
         print('--TYPE OF ENVIRONMENT: indoor')
@@ -163,6 +176,7 @@ def classify_places(image):
     print("h_x", len(h_x))
     return h_x, weight_softmax, idx
 
+"""""
 def do_activation(image, weight_softmax, idx):
     # generate class activation mapping
     print('Class activation map is saved as cam.jpg')
@@ -177,6 +191,6 @@ def do_activation(image, weight_softmax, idx):
 
     print("result", result.shape)
     return result
-
-#h_x, weight_softmax, idx = classify_places('cafe.jpg')
-#do_activation('cafe.jpg', weight_softmax, idx)
+"""
+#h_x, weight_softmax, idx = classify_places(open('cafe.jpg', "rb").read())
+# do_activation('cafe.jpg', weight_softmax, idx)

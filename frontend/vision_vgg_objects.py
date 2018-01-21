@@ -9,6 +9,8 @@ from PIL import Image
 
 def classify_objects(img_name):
     model = vgg16(pretrained=True)
+    if torch.cuda.is_available():
+        model.cuda()
     model.eval()
 
     # load the image transformer
@@ -25,8 +27,12 @@ def classify_objects(img_name):
     img = Image.open(io.BytesIO(img_name))
     input_img = V(centre_crop(img).unsqueeze(0))
 
-    # forward pass
+    if torch.cuda.is_available():
+        input_img = input_img.cuda()
     logit = model.forward(input_img)
     h_x = F.softmax(logit, 1).data.squeeze()
+    print(h_x)
     return h_x
-#classify_objects('cafe.jpg')
+
+
+#classify_objects(open('cafe.jpg', "rb").read())
