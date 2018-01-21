@@ -25,6 +25,7 @@ export class DropZone extends Component {
       .field("useObjects", this.props.useObjects)
       .field("useChatter", this.props.useChatter)
       .field("usePlaces", this.props.usePlaces)
+      .field("chatterLevel", this.props.chatterLevel)
       .attach("image", image)
       .then(res => {
         let objectTags = res.body.objectTags;

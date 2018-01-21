@@ -42,7 +42,7 @@ def classify():
     
     # do the stuff here
     obj_dist, plc_dist = do_classification(img)
-    volumes = bridge.get_sound(obj_dist, plc_dist, 1.0, request.form['useObjects'], request.form['usePlaces'], request.form['useChatter'])
+    volumes = bridge.get_sound(obj_dist, plc_dist, request.form['chatterLevel'], request.form['useObjects'], request.form['usePlaces'], request.form['useChatter'])
 
     return jsonify({ 'volumes': list(volumes), 'objectTags': ['a', 'b', 'c'], 'placeTags': ['d', 'e', 'f']})
 

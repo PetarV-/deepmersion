@@ -35,7 +35,9 @@ export default class App extends Component {
 
       useObjects: true,
       useChatter: true,
-      usePlaces: true
+      usePlaces: true,
+
+      chatterLevel: 1.0
     };
   }
 
@@ -90,6 +92,7 @@ export default class App extends Component {
           useObjects={this.state.useObjects}
           useChatter={this.state.useChatter}
           usePlaces={this.state.usePlaces}
+          chatterLevel={this.state.chatterLevel}
           onClassify={this.updateVolumes}
         />
 
