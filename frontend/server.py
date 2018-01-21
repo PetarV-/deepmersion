@@ -10,7 +10,7 @@ from flask import Flask, request, send_from_directory, send_file, jsonify
 sys.path.append('..')
 from backend.bridge import Bridge
 
-bridge = Bridge('../backend/db/')
+bridge = Bridge(path_to_db='../backend/db/')
 
 app = Flask(__name__, static_folder='deepmersion/build/static', static_url_path='/static')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
@@ -42,7 +42,7 @@ def classify():
     
     # do the stuff here
     obj_dist, plc_dist = do_classification(img)
-    volumes = bridge.get_sound(obj_dist, plc_dist, None, request.form['useObjects'], request.form['usePlaces'], request.form['useChatter'])
+    volumes = bridge.get_sound(obj_dist, plc_dist, 1.0, request.form['useObjects'], request.form['usePlaces'], request.form['useChatter'])
 
     return jsonify({ 'volumes': list(volumes), 'objectTags': ['a', 'b', 'c'], 'placeTags': ['d', 'e', 'f']})
 
