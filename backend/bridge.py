@@ -21,7 +21,7 @@ class Bridge:
     # use_plc: whether to use places
     # use_chatter: whether to use chatter or normal mode
     # Returns: a vector of shape (10,) containing volume levels
-    def get_sound(self, obj_dist, plc_dist, chatter_level=None, use_obj=True, use_plc=True, use_chatter=True):
+    def get_sound(self, obj_dist, plc_dist, chatter_level=None, use_obj=True, use_plc=True, use_chatter=False):
         # compute the closest obj/plc out of 1024 possible choices.
         # using kl distance
 
