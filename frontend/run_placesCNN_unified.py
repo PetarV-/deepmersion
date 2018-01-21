@@ -90,7 +90,7 @@ def returnTF():
     ])
     return tf
 
-model_cache = None
+model_cache = load_model()
 
 def load_model():
     global model_cache
