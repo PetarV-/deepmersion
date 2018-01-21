@@ -19,7 +19,7 @@ class Bridge:
     def __init__(self, nb_sounds=10, path_to_db=default_db):
         self.objs = np.load(path_to_db + 'objs_db.npy')
         self.plcs = np.load(path_to_db + 'plcs_db.npy')
-        self.msks = np.load(path_to_db + 'mask.npy')
+        self.msks = np.load(path_to_db + 'mask.npy').astype('int32')
         self.nb_sounds = nb_sounds
 
     # obj_dist: distribution of objects (shape: (1000,))
