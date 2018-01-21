@@ -1,23 +1,15 @@
 import React, { Component } from "react";
 
-import {
-  PageHeader,
-  Grid,
-  Row,
-  Col,
-  ButtonGroup,
-  Button,
-  Label
-} from "react-bootstrap";
+import { PageHeader, Grid, Row, Col, Label } from "react-bootstrap";
 
 import Dropzone from "react-dropzone";
 import request from "superagent";
 
 import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import faFileImage from "@fortawesome/fontawesome-free-regular/faFileImage";
-import faBomb from "@fortawesome/fontawesome-free-solid/faBomb";
 
 import { AudioGrid } from "./AudioChoices";
+import { Controls } from "./Controls";
 import "./App.css";
 import logo from "./logo.svg";
 
@@ -48,8 +40,8 @@ class App extends Component {
       placeTags: [],
 
       useObjects: true,
-      usePlaces: true,
-      useChatter: true
+      useChatter: true,
+      usePlaces: true
     };
   }
 
@@ -64,18 +56,6 @@ class App extends Component {
     });
 
     this.setState({ volumes: newVolumes, muted: false });
-  };
-
-  toggleMute = () => {
-    this.setState(previous => {
-      return { muted: !previous.muted };
-    });
-  };
-
-  toggleChatter = () => {
-    this.setState(previous => {
-      return { useChatter: !previous.useChatter };
-    });
   };
 
   classify = image => {
@@ -116,19 +96,11 @@ class App extends Component {
     reader.readAsDataURL(accepted[0]);
   };
 
-  toggleObjects = () => {
+  toggle = key => {
     this.setState(previous => {
-      return {
-        useObjects: !previous.useObjects
-      };
-    });
-  };
-
-  togglePlaces = () => {
-    this.setState(previous => {
-      return {
-        usePlaces: !previous.usePlaces
-      };
+      let result = {};
+      result[key] = !previous[key];
+      return result;
     });
   };
 
@@ -156,7 +128,7 @@ class App extends Component {
         <div className="shiny">
           <div className="container">
             <PageHeader>
-              <img src={logo} className="logo" alt="logo" /> DeepMersion{" "}
+              <img src={logo} className="logo" alt="logo" /> Deepmersion{" "}
               <small>own your surroundings</small>
             </PageHeader>
 
@@ -168,45 +140,14 @@ class App extends Component {
             </p>
           </div>
 
-          <div className="container controls">
-            <ButtonGroup>
-              <Button bsStyle="warning" onClick={this.randomizeSounds}>
-                <FontAwesomeIcon icon={faBomb} /> Randomize
-              </Button>
-              <Button
-                bsStyle="info"
-                active={this.state.muted}
-                onClick={this.toggleMute}
-              >
-                Mute
-              </Button>
-            </ButtonGroup>
-            &emsp;
-            <ButtonGroup>
-              <Button
-                bsStyle="primary"
-                active={this.state.useObjects}
-                onClick={this.toggleObjects}
-              >
-                Objects
-              </Button>
-              <Button
-                bsStyle="success"
-                active={this.state.usePlaces}
-                onClick={this.togglePlaces}
-              >
-                Places
-              </Button>
-            </ButtonGroup>
-            &emsp;
-            <Button
-              bsStyle="danger"
-              active={this.state.useChatter}
-              onClick={this.toggleChatter}
-            >
-              Chatter
-            </Button>
-          </div>
+          <Controls
+            onRandomise={this.randomizeSounds}
+            onToggle={this.toggle}
+            useObjects={this.state.useObjects}
+            useChatter={this.state.useChatter}
+            usePlaces={this.state.usePlaces}
+            muted={this.state.muted}
+          />
         </div>
 
         <div className="container dragdrop">
