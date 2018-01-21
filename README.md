@@ -1,5 +1,5 @@
 # deepmersion
-<img src="https://raw.githubusercontent.com/PetarV-/deepmersion/master/logo-scaled.png?token=AD_VHMMLyhlkxYhD6SdQPOo38S976D_2ks5abWcXwA%3D%3D" width="250">
+<img src="https://raw.githubusercontent.com/PetarV-/deepmersion/master/logo-scaled.png?token=AD_VHMMLyhlkxYhD6SdQPOo38S976D_2ks5abWcXwA%3D%3D" width="200">
 
 own your surroundings
 
@@ -44,6 +44,19 @@ the predictions of the image networks and the predictions of the SoundNet.
 All models have been expressed in the PyTorch framework, enabling seamless integration with Python workflows.
 
 ## Additional features
+
+Aside from the basic functionality mentioned above, we have implemented several extensions:
+
+- While our system is primarily accessed via a web browser (on both desktop and mobile), we provide a mobile application that immediately interfaces to a mobile phone's camera, for maximal convenience;
+- We support _two_ modes of generating sounds: one that searches a fixed database of superimposed sounds, and one that creates a custom superimposed sound, dependent on the basic sounds' similarity to images in the
+high-level feature space. as well as a single, minimal, "chatter" slider (which controls the general volume levels of each sound in the combination). Furthermore, the user may choose to disable either the object or scene features
+(depending on the level of granularity desired when making decisions).
+- In order to visualise the system's decisions to the user (potentially paving the way to feedback systems in the future), we leverage the class activation mapping (CAM) algorithm ([Zhou et al., 2015](https://arxiv.org/abs/1512.04150))
+to generate a heatmap-style overview of the most important regions of the given image in the networks' decision-making process.
+
+We would also like to highlight that sufficient code has been provided in the repository for keen users to construct their own databases (of not necessarily ambient sounds!).
+
+Further ideas and feedback are, of course, very welcome! Own your surroundings.
 
 ## License
 MIT
