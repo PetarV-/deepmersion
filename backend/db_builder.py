@@ -48,15 +48,9 @@ for i in range(1, 1 << nb_sounds):
     X = X[:,:,:LEN_WAVEFORM,:].astype('float32')
     X = Variable(torch.from_numpy(X.reshape(1, 1, LEN_WAVEFORM))).cuda()
     # Feed the underlying features to the network
-    Ys = model.forward(waveform=X)
-    out_objects[i][0] = unpack_cuda(Ys['ps1'][0])
-    out_places[i][0] = unpack_cuda(Ys['ps1'][1])
-    out_objects[i][1] = unpack_cuda(Ys['ps2'][0])
-    out_places[i][1] = unpack_cuda(Ys['ps2'][1])
-    out_objects[i][2] = unpack_cuda(Ys['ps3'][0])
-    out_places[i][2] = unpack_cuda(Ys['ps3'][1])
-    out_objects[i][3] = unpack_cuda(Ys['ps4'][0])
-    out_places[i][3] = unpack_cuda(Ys['ps4'][1])
+    (Y_obj, Y_plc) = model.forward(waveform=X)
+    out_objects[i] = unpack_cuda(Y_obj).transpose()
+    out_places[i] = unpack_cuda(Y_plc).transpose()
 
 np.save(db_base + 'objs_db.npy', out_objects)
 np.save(db_base + 'plcs_db.npy', out_places)
