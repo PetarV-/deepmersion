@@ -1,4 +1,5 @@
 # deepmersion
+![deepmersion][frontend/deepmersion/src/logo.svg]
 own your surroundings
 
 ## Motivation
@@ -21,7 +22,8 @@ The key principle of _immersion_ in sound requires, in our opinion, either for o
 for the sound to **reflect a distilled version of one's surroundings**, keeping the auditory experience coherent with the perceived world, and thus
 feeling less artificial. As our primary use case involves productivity-boosting (although other applications of deepmersion are, of course, more than possible),
 the first option can be quickly discarded. Therefore, _we would ideally want the generated ambient sound to match the context of the user's surroundings_.
-Deepmersion was built with this as its primary objective---especially, making it way simpler to do so compared to extensive manual fine-tuning.
+Deepmersion was built with this as its primary objective---especially, making it way simpler to do so compared to the extensive manual fine-tuning offered by
+existing solutions.
 
 ## License
 MIT
