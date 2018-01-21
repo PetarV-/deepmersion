@@ -9,7 +9,7 @@ import { DropZone } from "./DropZone";
 import "./App.css";
 import logo from "./logo.svg";
 
-class App extends Component {
+export default class App extends Component {
   constructor(props) {
     super(props);
 
@@ -94,7 +94,6 @@ class App extends Component {
         />
 
         <AudioGrid
-          ref="grid"
           muted={this.state.muted}
           masterVolume={this.state.masterVolume}
           volumes={this.state.volumes}
@@ -104,5 +103,3 @@ class App extends Component {
     );
   }
 }
-
-export default App;
