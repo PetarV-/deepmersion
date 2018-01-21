@@ -1,5 +1,5 @@
 import numpy as np
-from scipy import stats.entropy
+from scipy.stats import entropy
 
 # Linking functions to be accessed by the frontend
 
@@ -9,8 +9,8 @@ def kl(pks, qk):
     # we can 'safely?' ignore divide by zero errors here.
     with np.errstate(divide='ignore', invalid='ignore'):
         min_kl = None
-        for i in pks.shape[0]:
-            curr_kl = stats.entropy(pks[i], qk)
+        for i in range(pks.shape[0]):
+            curr_kl = entropy(pks[i], qk)
             if min_kl is None or curr_kl < min_kl:
                 min_kl = curr_kl
         return min_kl
@@ -48,7 +48,7 @@ class Bridge:
             l = -4.6 * (chatter_level - 1.0)
 
             for i in range(self.nb_sounds):
-                out[indices[i]] = exp(-l * i)
+                out[indices[i]] = np.exp(-l * i)
 
         else:
             # compute the closest obj/plc out of 1024 possible choices.
