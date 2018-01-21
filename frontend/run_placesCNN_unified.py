@@ -1,18 +1,22 @@
 # PlacesCNN to predict the scene category, attribute, and class activation map in a single pass
 # by Bolei Zhou, sep 2, 2017
 # last modified date: Dec. 27, 2017, migrating everything to python36 and latest pytorch and torchvision
+import os
 
 import torch
-from torch.autograd import Variable as V
 import torchvision.models as models
+
+from torch.autograd import Variable as V
 from torchvision import transforms as trn
 from torch.nn import functional as F
-import os
+
 import numpy as np
 from scipy.misc import imresize as imresize
+
 import cv2
 from PIL import Image
 
+here = os.path.dirname(__file__)
 
 def load_labels():
     # prepare all the labels
@@ -22,7 +26,7 @@ def load_labels():
         synset_url = 'https://raw.githubusercontent.com/csailvision/places365/master/categories_places365.txt'
         os.system('wget ' + synset_url)
     classes = list()
-    with open(file_name_category) as class_file:
+    with open(os.path.join(here, file_name_category)) as class_file:
         for line in class_file:
             classes.append(line.strip().split(' ')[0][3:])
     classes = tuple(classes)
@@ -32,7 +36,7 @@ def load_labels():
     if not os.access(file_name_IO, os.W_OK):
         synset_url = 'https://raw.githubusercontent.com/csailvision/places365/master/IO_places365.txt'
         os.system('wget ' + synset_url)
-    with open(file_name_IO) as f:
+    with open(os.path.join(here, file_name_IO)) as f:
         lines = f.readlines()
         labels_IO = []
         for line in lines:
@@ -45,7 +49,7 @@ def load_labels():
     if not os.access(file_name_attribute, os.W_OK):
         synset_url = 'https://raw.githubusercontent.com/csailvision/places365/master/labels_sunattribute.txt'
         os.system('wget ' + synset_url)
-    with open(file_name_attribute) as f:
+    with open(os.path.join(here, file_name_attribute)) as f:
         lines = f.readlines()
         labels_attribute = [item.rstrip() for item in lines]
     file_name_W = 'W_sceneattribute_wideresnet18.npy'
