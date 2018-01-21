@@ -16,7 +16,7 @@ from scipy.misc import imresize as imresize
 import cv2
 from PIL import Image
 
-model_dir = os.environ.getenv('FRONTEND_HOME', '.')
+model_dir = os.getenv('FRONTEND_HOME', '.')
 
 def load_labels():
     # prepare all the labels
