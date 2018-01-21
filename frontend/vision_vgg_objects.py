@@ -1,3 +1,4 @@
+import io
 import torch
 from torch.autograd import Variable as V
 import torchvision.models as models
@@ -21,7 +22,7 @@ def classify_objects(img_name):
     # load the class label
     file_name = 'categories_imagenet.txt'
 
-    img = Image.open(img_name)
+    img = Image.open(io.BytesIO(img_name))
     input_img = V(centre_crop(img).unsqueeze(0))
 
     # forward pass
