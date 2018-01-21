@@ -34,7 +34,7 @@ export default class App extends Component {
       volumes: this.sounds.map(_ => 0),
 
       useObjects: true,
-      useChatter: true,
+      useChatter: false,
       usePlaces: true,
 
       chatterLevel: 1.0
