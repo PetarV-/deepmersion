@@ -7,7 +7,7 @@ from torchvision import transforms as trn
 from torch.nn import functional as F
 from PIL import Image
 
-vgg_model_cache = vgg16(pretrained=True)
+vgg_model_cache = None
 
 def classify_objects(img_name):
     global vgg_model_cache

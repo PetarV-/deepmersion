@@ -128,8 +128,6 @@ def load_model():
         model._modules.get(name).register_forward_hook(hook_feature)
     return model
 
-load_model()
-
 features_blobs = []
 
 def classify_places(image):
