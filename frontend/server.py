@@ -9,7 +9,7 @@ import numpy as np
 from PIL import Image
 from flask import Flask, request, send_from_directory, send_file, jsonify
 
-sys.path.append('..')
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from backend.bridge import Bridge
 from vision_vgg_objects import classify_objects
 from run_placesCNN_unified import *
