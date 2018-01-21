@@ -1,5 +1,6 @@
 # deepmersion
-![deepmersion][frontend/deepmersion/src/logo.svg]
+![deepmersion][https://github.com/PetarV-/deepmersion/blob/master/frontend/deepmersion/src/logo.svg]
+
 own your surroundings
 
 ## Motivation
