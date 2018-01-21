@@ -1,6 +1,7 @@
 """
     Front-end server for deepmersion.
-    """
+"""
+import os
 import sys
 import requests
 import numpy as np
@@ -49,7 +50,7 @@ def classify():
     obj_dist, plc_dist = do_classification(image)
     volumes = bridge.get_sound(obj_dist, plc_dist, float(request.form['chatterLevel']), request.form['useObjects'], request.form['usePlaces'], request.form['useChatter'])
 
-return jsonify({ 'volumes': list(volumes), 'objectTags': ['a', 'b', 'c'], 'placeTags': ['d', 'e', 'f']})
+    return jsonify({ 'volumes': list(volumes), 'objectTags': ['a', 'b', 'c'], 'placeTags': ['d', 'e', 'f']})
 
 if __name__ == '__main__':
     app.run(debug=True)
