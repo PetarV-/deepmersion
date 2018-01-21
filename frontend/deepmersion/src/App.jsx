@@ -156,7 +156,7 @@ class App extends Component {
         <div className="shiny">
           <div className="container">
             <PageHeader>
-              <img src={logo} className="logo" alt="logo" /> DeepMersion{" "}
+              <img src={logo} className="logo" alt="logo" /> Deepmersion{" "}
               <small>own your surroundings</small>
             </PageHeader>
 
